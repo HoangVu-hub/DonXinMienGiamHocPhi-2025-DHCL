@@ -6,7 +6,7 @@
     <meta name="description" content="Tính điểm trung bình và kiểm tra chính sách giảm học phí cho tân sinh viên Đại học Cửu Long">
     <meta name="keywords" content="giảm học phí, Đại học Cửu Long, tính điểm trung bình, xét tuyển đại học">
     <meta name="author" content="Đại học Cửu Long">
-    <title>Tính Điểm & Chính Sách Giảm Học Phí - Đại học Cửu Long</title>
+    <title>Tính Điểm & Giảm Học Phí - Đại học Cửu Long</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -65,6 +65,11 @@
             color: #1e40af;
             font-weight: 500;
         }
+        .policy-option label {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         .sub-policy {
             margin-left: 1.5rem;
             margin-top: 0.25rem;
@@ -113,6 +118,9 @@
             .policy-option {
                 padding: 0.5rem;
             }
+            .policy-option label {
+                font-size: 0.75rem;
+            }
             table {
                 font-size: 0.75rem;
             }
@@ -123,19 +131,14 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen flex flex-col items-center p-4 sm:p-6">
-    <header class="text-center mb-6">
-        <a href="https://tuyensinh.mku.edu.vn/" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/vi/thumb/d/de/Logo_Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_C%E1%BB%ADu_Long.svg/1200px-Logo_Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_C%E1%BB%ADu_Long.svg.png" alt="Logo Đại học Cửu Long" class="w-24 sm:w-32 mx-auto hover:scale-105 transition-transform duration-300">
-        </a>
-        <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-blue-800 mt-3">Tính Điểm & Giảm Học Phí</h1>
-    </header>
     <main class="w-full max-w-4xl flex flex-col md:flex-row gap-4 sm:gap-6">
         <section class="bg-white rounded-xl shadow-md p-4 sm:p-5 w-full md:w-1/2">
+            <h1 class="text-xl sm:text-2xl font-bold text-blue-800 mb-4 text-center">Tính Điểm & Giảm Học Phí</h1>
             <h2 class="text-lg sm:text-xl font-semibold text-blue-700 mb-3">Nhập Thông Tin & Điểm</h2>
             <form class="space-y-3" id="inputForm">
                 <div>
                     <label for="fullName" class="block text-sm font-medium text-gray-700">Họ và tên *</label>
-                    <input type="text" id="fullName" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm sm:text-base" placeholder="Họ tên" required onkeypress="handleEnter(event, this)" aria-label="Họ và tên">
+                    <input type="text" id="fullName" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm sm:text-base" placeholder="Họ tên" required oninput="capitalizeWords(this)" onkeypress="handleEnter(event, this)" aria-label="Họ và tên">
                 </div>
                 <div>
                     <label for="dob" class="block text-sm font-medium text-gray-700">Ngày sinh *</label>
@@ -143,11 +146,11 @@
                 </div>
                 <div>
                     <label for="birthPlace" class="block text-sm font-medium text-gray-700">Nơi sinh *</label>
-                    <input type="text" id="birthPlace" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm sm:text-base" placeholder="Nơi sinh" required onkeypress="handleEnter(event, this)" aria-label="Nơi sinh">
+                    <input type="text" id="birthPlace" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm sm:text-base" placeholder="Nơi sinh" required oninput="capitalizeWords(this)" onkeypress="handleEnter(event, this)" aria-label="Nơi sinh">
                 </div>
                 <div>
                     <label for="address" class="block text-sm font-medium text-gray-700">Địa chỉ *</label>
-                    <input type="text" id="address" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm sm:text-base" placeholder="Địa chỉ" required onkeypress="handleEnter(event, this)" aria-label="Địa chỉ">
+                    <input type="text" id="address" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm sm:text-base" placeholder="Địa chỉ" required oninput="capitalizeWords(this)" onkeypress="handleEnter(event, this)" aria-label="Địa chỉ">
                 </div>
                 <div>
                     <label for="phone" class="block text-sm font-medium text-gray-700">Số điện thoại *</label>
@@ -156,31 +159,73 @@
                 </div>
                 <div class="custom-select">
                     <label for="major" class="block text-sm font-medium text-gray-700">Ngành học *</label>
-                    <input type="text" id="major" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm sm:text-base" placeholder="Nhập ngành (VD: Công nghệ)" required oninput="filterMajors(this)" onkeypress="handleEnter(event, this)" onfocus="showSuggestions()" onblur="hideSuggestions()" aria-label="Ngành học">
+                    <input type="text" id="major" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm sm:text-base" placeholder="Nhập ngành (VD: Công nghệ)" required oninput="filterMajors(this); capitalizeWords(this)" onkeypress="handleEnter(event, this)" onfocus="showSuggestions()" onblur="hideSuggestions()" aria-label="Ngành học">
                     <div id="majorSuggestions" class="suggestion-list"></div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Chính sách giảm học phí</label>
+                    <label class="block text-sm font-medium text-gray-700">Chính sách giảm học phí: (chọn chính sách miễn giảm theo mục của văn bản chính sách)</label>
                     <div class="space-y-2 mt-2">
                         <div class="flex items-center policy-option">
-                            <input type="radio" id="policyByScore" name="discountPolicy" value="byScore" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" onchange="toggleEduTypeAndScoreTable()" aria-label="Chính sách dựa trên điểm trung bình">
-                            <label for="policyByScore" class="ml-2 text-sm text-gray-700">Dựa trên điểm trung bình lớp 12 (Chọn mở bảng tính điểm) </label>
-                        </div>
-                        <div class="flex items-center policy-option">
                             <input type="radio" id="policy1" name="discountPolicy" value="1" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" onchange="toggleEduTypeAndScoreTable()" aria-label="Hộ nghèo, cận nghèo">
-                            <label for="policy1" class="ml-2 text-sm text-gray-700">Hộ nghèo, cận nghèo (50% năm thứ nhất)</label>
+                            <label for="policy1" class="ml-2 text-sm text-gray-700">1. Hộ nghèo, cận nghèo (50% năm thứ nhất)</label>
+                            <div id="policy1Options" class="sub-policy" style="display: none;">
+                                <div class="flex items-center">
+                                    <input type="radio" id="policy1_poor" name="policy1Type" value="poor" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" checked>
+                                    <label for="policy1_poor" class="ml-2 text-sm text-gray-700">Hộ nghèo</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy1_nearPoor" name="policy1Type" value="nearPoor" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy1_nearPoor" class="ml-2 text-sm text-gray-700">Cận nghèo</label>
+                                </div>
+                            </div>
                         </div>
                         <div class="flex items-center policy-option">
                             <input type="radio" id="policy2" name="discountPolicy" value="2" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" onchange="toggleEduTypeAndScoreTable()" aria-label="Mồ côi cha hoặc mẹ">
-                            <label for="policy2" class="ml-2 text-sm text-gray-700">Mồ côi cha hoặc mẹ (50% năm thứ nhất)</label>
+                            <label for="policy2" class="ml-2 text-sm text-gray-700">2. Mồ côi cha hoặc mẹ (50% năm thứ nhất)</label>
+                            <div id="policy2Options" class="sub-policy" style="display: none;">
+                                <div class="flex items-center">
+                                    <input type="radio" id="policy2_father" name="policy2Type" value="father" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" checked>
+                                    <label for="policy2_father" class="ml-2 text-sm text-gray-700">Mồ côi cha</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy2_mother" name="policy2Type" value="mother" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy2_mother" class="ml-2 text-sm text-gray-700">Mồ côi mẹ</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy2_both" name="policy2Type" value="both" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy2_both" class="ml-2 text-sm text-gray-700">Mồ côi cha và mẹ</label>
+                                </div>
+                            </div>
                         </div>
                         <div class="flex items-center policy-option">
                             <input type="radio" id="policy3" name="discountPolicy" value="3" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" onchange="toggleEduTypeAndScoreTable()" aria-label="Con người có công, dân tộc thiểu số">
-                            <label for="policy3" class="ml-2 text-sm text-gray-700">Con người có công, dân tộc thiểu số,... (40% HK1)</label>
+                            <label for="policy3" class="ml-2 text-sm text-gray-700">3. Con người có công, dân tộc thiểu số,... (40% HK1)</label>
+                            <div id="policy3Options" class="sub-policy" style="display: none;">
+                                <div class="flex items-center">
+                                    <input type="radio" id="policy3_revolutionary" name="policy3Type" value="revolutionary" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" checked>
+                                    <label for="policy3_revolutionary" class="ml-2 text-sm text-gray-700">Con của người có công với cách mạng</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy3_sibling" name="policy3Type" value="sibling" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy3_sibling" class="ml-2 text-sm text-gray-700">Có anh/chị đang là sinh viên ĐHCL</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy3_minority" name="policy3Type" value="minority" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy3_minority" class="ml-2 text-sm text-gray-700">Người dân tộc thiểu số</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy3_teacherChild" name="policy3Type" value="teacherChild" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy3_teacherChild" class="ml-2 text-sm text-gray-700">Con ruột của CB, GV trường THPT,...</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy3_mkuRelative" name="policy3Type" value="mkuRelative" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy3_mkuRelative" class="ml-2 text-sm text-gray-700">Con, em, cháu ruột của CB, GV ĐHCL</label>
+                                </div>
+                            </div>
                         </div>
                         <div class="flex items-center policy-option">
                             <input type="radio" id="policy4" name="discountPolicy" value="4" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" onchange="toggleEduTypeAndScoreTable()" aria-label="Học sinh Vĩnh Long hoặc Phú Quới">
-                            <label for="policy4" class="ml-2 text-sm text-gray-700">Học sinh Vĩnh Long hoặc Phú Quới</label>
+                            <label for="policy4" class="ml-2 text-sm text-gray-700">4. Học sinh Vĩnh Long hoặc Phú Quới</label>
                             <div id="policy4Options" class="sub-policy" style="display: none;">
                                 <div class="flex items-center">
                                     <input type="radio" id="policy4_20" name="policy4Type" value="20%" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" checked>
@@ -194,15 +239,85 @@
                         </div>
                         <div class="flex items-center policy-option">
                             <input type="radio" id="policy5" name="discountPolicy" value="5" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" onchange="toggleEduTypeAndScoreTable()" aria-label="Ngành ưu tiên giảm học phí trọn khóa">
-                            <label for="policy5" class="ml-2 text-sm text-gray-700">Ngành Công tác xã hội, Kỹ thuật xây dựng công trình giao thông, Kỹ thuật y sinh, Kinh doanh thương mại, Hộ sinh, Kỹ thuật hình ảnh y học (20% trọn khóa)</label>
+                            <label for="policy5" class="ml-2 text-sm text-gray-700">5. các Ngành ưu tiên giảm học phí: Hộ sinh,..</label>
+                            <div id="policy5Options" class="sub-policy" style="display: none;">
+                                <div class="flex items-center">
+                                    <input type="radio" id="policy5_socialWork" name="policy5Type" value="Công tác xã hội" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" checked>
+                                    <label for="policy5_socialWork" class="ml-2 text-sm text-gray-700">Công tác xã hội</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy5_transport" name="policy5Type" value="Kỹ thuật xây dựng công trình giao thông" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy5_transport" class="ml-2 text-sm text-gray-700">Kỹ thuật xây dựng công trình giao thông</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy5_biomedical" name="policy5Type" value="Kỹ thuật y sinh" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy5_biomedical" class="ml-2 text-sm text-gray-700">Kỹ thuật y sinh</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy5_commerce" name="policy5Type" value="Kinh doanh thương mại" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy5_commerce" class="ml-2 text-sm text-gray-700">Kinh doanh thương mại</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy5_midwifery" name="policy5Type" value="Hộ sinh" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy5_midwifery" class="ml-2 text-sm text-gray-700">Hộ sinh</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy5_imaging" name="policy5Type" value="Kỹ thuật hình ảnh y học" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy5_imaging" class="ml-2 text-sm text-gray-700">Kỹ thuật hình ảnh y học</label>
+                                </div>
+                            </div>
                         </div>
                         <div class="flex items-center policy-option">
                             <input type="radio" id="policy9" name="discountPolicy" value="9" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" onchange="toggleEduTypeAndScoreTable()" aria-label="Dân tộc Khmer">
-                            <label for="policy9" class="ml-2 text-sm text-gray-700">Dân tộc Khmer (Miễn phí toàn khóa)</label>
+                            <label for="policy9" class="ml-2 text-sm text-gray-700">9. Dân tộc Khmer giới thiệu của Ban Dân tộc các tỉnh</label>
+                            <div id="policy9Options" class="sub-policy" style="display: none;">
+                                <div class="flex items-center">
+                                    <input type="radio" id="policy9_anGiang" name="policy9Type" value="An Giang" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" checked>
+                                    <label for="policy9_anGiang" class="ml-2 text-sm text-gray-700">An Giang</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy9_bacLieu" name="policy9Type" value="Bạc Liêu" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy9_bacLieu" class="ml-2 text-sm text-gray-700">Bạc Liêu</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy9_hauGiang" name="policy9Type" value="Hậu Giang" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy9_hauGiang" class="ml-2 text-sm text-gray-700">Hậu Giang</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy9_kienGiang" name="policy9Type" value="Kiên Giang" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy9_kienGiang" class="ml-2 text-sm text-gray-700">Kiên Giang</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy9_socTrang" name="policy9Type" value="Sóc Trăng" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy9_socTrang" class="ml-2 text-sm text-gray-700">Sóc Trăng</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy9_traVinh" name="policy9Type" value="Trà Vinh" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy9_traVinh" class="ml-2 text-sm text-gray-700">Trà Vinh</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy9_vinhLong" name="policy9Type" value="Vĩnh Long" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy9_vinhLong" class="ml-2 text-sm text-gray-700">Vĩnh Long</label>
+                                </div>
+                            </div>
                         </div>
                         <div class="flex items-center policy-option">
                             <input type="radio" id="policy10" name="discountPolicy" value="10" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" onchange="toggleEduTypeAndScoreTable()" aria-label="Con thương binh, con liệt sĩ">
-                            <label for="policy10" class="ml-2 text-sm text-gray-700">Con thương binh, con liệt sĩ (50% HK1)</label>
+                            <label for="policy10" class="ml-2 text-sm text-gray-700">10. Con thương binh, con liệt sĩ (50% HK1)</label>
+                            <div id="policy10Options" class="sub-policy" style="display: none;">
+                                <div class="flex items-center">
+                                    <input type="radio" id="policy10_wounded" name="policy10Type" value="wounded" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" checked>
+                                    <label for="policy10_wounded" class="ml-2 text-sm text-gray-700">Con thương binh</label>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <input type="radio" id="policy10_martyr" name="policy10Type" value="martyr" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300">
+                                    <label for="policy10_martyr" class="ml-2 text-sm text-gray-700">Con liệt sĩ</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center policy-option">
+                            <input type="radio" id="policyByScore" name="discountPolicy" value="byScore" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" onchange="toggleEduTypeAndScoreTable()" aria-label="Chính sách dựa trên điểm trung bình">
+                            <label for="policyByScore" class="ml-2 text-sm text-gray-700">6 & 7 & 8 &Dựa trên điểm trung bình lớp 12</label>
                         </div>
                     </div>
                     <button type="button" onclick="clearPolicySelection()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-sm sm:text-base">Xóa lựa chọn</button>
@@ -296,7 +411,12 @@
             </form>
         </section>
         <section class="bg-white rounded-xl shadow-md p-4 sm:p-5 w-full md:w-1/2">
-            <h2 class="text-lg sm:text-xl font-semibold text-blue-700 mb-3">Chính Sách Giảm Học Phí</h2>
+            <div class="text-center mb-4">
+                <a href="https://tuyensinh.mku.edu.vn/" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/vi/thumb/d/de/Logo_Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_C%E1%BB%ADu_Long.svg/1200px-Logo_Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_C%E1%BB%ADu_Long.svg.png" alt="Logo Đại học Cửu Long" class="w-24 sm:w-32 mx-auto hover:scale-105 transition-transform duration-300">
+                </a>
+            </div>
+            <h2 class="text-lg sm:text-xl font-semibold text-blue-700 mb-3">Chính Sách Giảm Học Phí (Đọc chính sách để chọn đúng điều kiện miễn giảm học phí)</h2>
             <ul id="policyList" class="list-decimal pl-5 space-y-1.5 text-xs sm:text-sm text-gray-700">
                 <li data-policy="1">Giảm 50% học phí năm thứ nhất cho tân sinh viên hộ nghèo, cận nghèo (không áp dụng cho Y khoa, Y học cổ truyền, Răng Hàm Mặt).</li>
                 <li data-policy="2">Giảm 50% học phí năm thứ nhất cho tân sinh viên mồ côi cha hoặc mẹ (không áp dụng cho Y khoa, Y học cổ truyền, Răng Hàm Mặt).</li>
@@ -381,6 +501,23 @@
             "Quan hệ công chúng"
         ];
 
+        function capitalizeWords(input) {
+            let value = input.value;
+            let cursorPos = input.selectionStart;
+            let words = value.split(' ');
+            let newWords = words.map((word, index) => {
+                if (word.length > 0) {
+                    return word.charAt(0).toUpperCase() + word.slice(1);
+                }
+                return word;
+            });
+            let newValue = newWords.join(' ');
+            if (newValue !== value) {
+                input.value = newValue;
+                input.setSelectionRange(cursorPos, cursorPos);
+            }
+        }
+
         function validatePhone(input) {
             const value = input.value;
             const errorDiv = document.getElementById('error-phone');
@@ -460,6 +597,19 @@
         function selectMajor(major) {
             document.getElementById('major').value = major;
             document.getElementById('majorSuggestions').style.display = 'none';
+            const eligibleMajors = [
+                'Công tác xã hội',
+                'Kỹ thuật xây dựng công trình giao thông',
+                'Kỹ thuật y sinh',
+                'Kinh doanh thương mại',
+                'Hộ sinh',
+                'Kỹ thuật hình ảnh y học'
+            ];
+            if (eligibleMajors.includes(major)) {
+                document.getElementById('policy5').checked = true;
+                document.getElementById(`policy5_${major.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '')}`).checked = true;
+                toggleEduTypeAndScoreTable();
+            }
         }
 
         function handleEnter(event, currentInput) {
@@ -477,6 +627,9 @@
                 const currentIndex = allInputs.indexOf(currentInput);
                 if (currentIndex < allInputs.length - 1) {
                     allInputs[currentIndex + 1].focus();
+                    if (['fullName', 'birthPlace', 'address', 'major'].includes(allInputs[currentIndex + 1].id)) {
+                        setTimeout(() => capitalizeWords(allInputs[currentIndex + 1]), 0);
+                    }
                 } else {
                     document.getElementById('calculateButton').focus();
                 }
@@ -488,23 +641,27 @@
             const eduTypeContainer = document.getElementById('eduTypeContainer');
             const scoreTable = document.getElementById('scoreTable');
             const scoreInstruction = document.getElementById('scoreInstruction');
-            const policy4Options = document.getElementById('policy4Options');
+            const policyOptions = document.querySelectorAll('.sub-policy');
+            policyOptions.forEach(option => option.style.display = 'none');
             if (selectedPolicy && selectedPolicy.value === 'byScore') {
                 eduTypeContainer.style.display = 'block';
                 scoreTable.style.display = 'table';
                 scoreInstruction.style.display = 'block';
-                policy4Options.style.display = 'none';
                 updateSubjectTable();
-            } else if (selectedPolicy && selectedPolicy.value === '4') {
+            } else if (selectedPolicy) {
+                document.getElementById(`policy${selectedPolicy.value}Options`).style.display = 'block';
                 eduTypeContainer.style.display = 'none';
                 scoreTable.style.display = 'none';
                 scoreInstruction.style.display = 'none';
-                policy4Options.style.display = 'block';
+                document.getElementById('eduType').value = 'thpt';
+                document.querySelectorAll('#scoreTable input').forEach(input => {
+                    input.value = '';
+                    document.getElementById(`error-${input.id}`).style.display = 'none';
+                });
             } else {
                 eduTypeContainer.style.display = 'none';
                 scoreTable.style.display = 'none';
                 scoreInstruction.style.display = 'none';
-                policy4Options.style.display = 'none';
                 document.getElementById('eduType').value = 'thpt';
                 document.querySelectorAll('#scoreTable input').forEach(input => {
                     input.value = '';
@@ -552,6 +709,16 @@
                 return;
             }
 
+            if (selectedPolicy && ['1', '2', '3', '4', '5', '9', '10'].includes(selectedPolicy.value)) {
+                const subType = document.querySelector(`input[name="policy${selectedPolicy.value}Type"]:checked`);
+                if (!subType) {
+                    totalResult.innerText = `Lỗi: Vui lòng chọn mục con cho chính sách ${selectedPolicy.value}`;
+                    document.getElementById(`policy${selectedPolicy.value}`).classList.add('invalid');
+                    setTimeout(() => document.getElementById(`policy${selectedPolicy.value}`).classList.remove('invalid'), 1000);
+                    return;
+                }
+            }
+
             const major = majorInput.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
             const restrictedMajors = ['y khoa', 'y hoc co truyen', 'rang ham mat'];
             const pharmacyMajor = ['duoc hoc'];
@@ -567,9 +734,9 @@
             const isPharmacyMajor = pharmacyMajor.some(pharmacy => major.includes(pharmacy));
             const isEligibleMajor = eligibleMajors.some(eligible => major.includes(eligible));
             let discountMessage = '';
-            let selectedPolicyId = '';
             let fullDiscountMessage = '';
-            let discountType = '';
+            let selectedPolicyId = '';
+            let subType = '';
 
             document.querySelectorAll('#policyList li').forEach(li => li.classList.remove('highlight'));
 
@@ -657,16 +824,22 @@
                 totalResult.innerText = `Điểm trung bình: ${averageScore}\n${discountMessage}`;
             } else if (selectedPolicy && ['1', '2', '3', '4', '5', '9', '10'].includes(selectedPolicy.value)) {
                 selectedPolicyId = selectedPolicy.value;
-                if (selectedPolicyId === '4') {
-                    discountType = document.querySelector('input[name="policy4Type"]:checked').value;
-                    discountMessage = discountType === '20%'
-                        ? 'Giảm 20% học phí HK1 năm thứ nhất cho học sinh THPT, TTGDTX ở Vĩnh Long.'
-                        : 'Giảm 40% học phí HK1 năm thứ nhất cho học sinh THCS và THPT Phú Quới.';
-                    fullDiscountMessage = document.querySelector(`#policyList li[data-policy="4"]`).textContent.replace(/^\d+\.\s*/, '');
-                } else {
-                    discountMessage = document.querySelector(`#policyList li[data-policy="${selectedPolicyId}"]`).textContent.replace(/^\d+\.\s*/, '');
-                    fullDiscountMessage = discountMessage;
-                }
+                subType = document.querySelector(`input[name="policy${selectedPolicy.value}Type"]:checked`)?.value || '';
+                const policyMessages = {
+                    '1': `Giảm 50% học phí năm thứ nhất cho tân sinh viên ${subType === 'poor' ? 'hộ nghèo' : 'cận nghèo'}.`,
+                    '2': `Giảm 50% học phí năm thứ nhất cho tân sinh viên mồ côi ${subType === 'father' ? 'cha' : subType === 'mother' ? 'mẹ' : 'cha và mẹ'}.`,
+                    '3': `Giảm 40% học phí HK1 năm thứ nhất cho tân sinh viên là ${{
+                        revolutionary: 'con của người có công với cách mạng',
+                        sibling: 'có anh/chị đang là sinh viên ĐHCL',
+                        minority: 'người dân tộc thiểu số',
+                        teacherChild: 'con ruột của CB, GV trường THPT, TTGDTX, Sở GD&ĐT các tỉnh',
+                        mkuRelative: 'con, em, cháu ruột của CB, GV ĐHCL'
+                    }[subType]}.`,
+                    '4': `Giảm ${subType} học phí HK1 năm thứ nhất cho học sinh ${subType === '20%' ? 'THPT, TTGDTX ở Vĩnh Long' : 'THCS và THPT Phú Quới'}.`,
+                    '5': `Giảm 20% học phí trọn khóa cho ngành ${subType}.`,
+                    '9': `Miễn học phí toàn khóa cho sinh viên dân tộc Khmer theo giới thiệu của Ban Dân tộc tỉnh ${subType}.`,
+                    '10': `Giảm 50% học phí HK1 năm thứ nhất cho ${subType === 'wounded' ? 'con thương binh' : 'con liệt sĩ'}.`
+                };
                 if (selectedPolicyId === '1' && isRestrictedMajor) {
                     discountMessage = `Ngành ${majorInput}: Không đủ điều kiện giảm học phí (1 không áp dụng cho Y khoa, Y học cổ truyền, Răng Hàm Mặt).`;
                     selectedPolicyId = '';
@@ -685,12 +858,16 @@
                 } else if (selectedPolicyId === '9' && isRestrictedMajor) {
                     discountMessage = `Ngành ${majorInput}: Không đủ điều kiện giảm học phí (9 không áp dụng cho Y khoa, Y học cổ truyền, Răng Hàm Mặt).`;
                     selectedPolicyId = '';
+                } else {
+                    discountMessage = policyMessages[selectedPolicyId];
+                    fullDiscountMessage = document.querySelector(`#policyList li[data-policy="${selectedPolicyId}"]`).textContent.replace(/^\d+\.\s*/, '');
                 }
                 totalResult.innerText = discountMessage;
             } else if (isEligibleMajor) {
                 selectedPolicyId = '5';
-                discountMessage = document.querySelector(`#policyList li[data-policy="5"]`).textContent.replace(/^\d+\.\s*/, '');
-                fullDiscountMessage = discountMessage;
+                subType = majorInput;
+                discountMessage = `Giảm 20% học phí trọn khóa cho ngành ${majorInput}.`;
+                fullDiscountMessage = document.querySelector(`#policyList li[data-policy="5"]`).textContent.replace(/^\d+\.\s*/, '');
                 totalResult.innerText = discountMessage;
             } else {
                 selectedPolicyId = '';
@@ -718,19 +895,19 @@
                 discountMessage: discountMessage,
                 fullDiscountMessage: fullDiscountMessage,
                 selectedPolicyId: selectedPolicyId,
-                discountType: discountType
+                discountType: subType
             };
             localStorage.setItem('applicationData', JSON.stringify(personalInfo));
         }
 
         function clearPolicySelection() {
             document.querySelectorAll('input[name="discountPolicy"]').forEach(radio => radio.checked = false);
-            document.querySelectorAll('input[name="policy4Type"]').forEach(radio => radio.checked = false);
+            document.querySelectorAll('input[name^="policy"][name$="Type"]').forEach(radio => radio.checked = false);
             document.querySelectorAll('#policyList li').forEach(li => li.classList.remove('highlight'));
             document.getElementById('eduTypeContainer').style.display = 'none';
             document.getElementById('scoreTable').style.display = 'none';
             document.getElementById('scoreInstruction').style.display = 'none';
-            document.getElementById('policy4Options').style.display = 'none';
+            document.querySelectorAll('.sub-policy').forEach(option => option.style.display = 'none');
             document.getElementById('eduType').value = 'thpt';
             document.querySelectorAll('#scoreTable input').forEach(input => {
                 input.value = '';
@@ -765,9 +942,12 @@
                 return;
             }
             const selectedPolicy = document.querySelector('input[name="discountPolicy"]:checked');
-            if (selectedPolicy && selectedPolicy.value === '4' && !document.querySelector('input[name="policy4Type"]:checked')) {
-                alert('Vui lòng chọn mức giảm học phí (20% hoặc 40%) cho chính sách số 4!');
-                return;
+            if (selectedPolicy && ['1', '2', '3', '4', '5', '9', '10'].includes(selectedPolicy.value)) {
+                const subType = document.querySelector(`input[name="policy${selectedPolicy.value}Type"]:checked`);
+                if (!subType) {
+                    alert(`Vui lòng chọn mục con cho chính sách ${selectedPolicy.value}!`);
+                    return;
+                }
             }
 
             window.location.href = 'application-form.html';
@@ -776,6 +956,10 @@
         window.onload = function() {
             toggleEduTypeAndScoreTable();
             updateSubjectTable();
+            ['fullName', 'birthPlace', 'address', 'major'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input.value) capitalizeWords(input);
+            });
         };
     </script>
 </body>
