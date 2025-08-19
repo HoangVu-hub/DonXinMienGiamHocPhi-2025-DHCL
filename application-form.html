@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" style="--kinh-gui-margin: 295.11273193359375px;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -276,8 +276,8 @@
         <h2 class="form-title mt-4 mb-2">ĐƠN XIN NHẬN TIỀN MIỄN GIẢM HỌC PHÍ</h2>
         <p class="form-title" id="subtitle">Dành cho tân sinh viên <span class="shape">hệ Đại học chính</span> quy năm 2025, khóa 26</p>
         <div class="recipient mt-4">
-            <p id="kinhGui" class="kinh-gui"><strong>Kính gửi:</strong></p>
-            <div class="flex">
+            <p id="kinhGui" class="kinh-gui" style="margin-left: 223.316px;"><strong>Kính gửi:</strong></p>
+            <div class="flex" style="margin-left: 295.113px;">
                 <div class="inline-block space-y-1">
                     <p>Ban Giám hiệu Trường Đại học Cửu Long;</p>
                     <p>Trung tâm Tuyển sinh – Truyền thông;</p>
@@ -301,7 +301,7 @@
             <p class="font-medium">Tôi thuộc diện miễn giảm học phí:</p>
             <ul id="policyList" class="list-decimal pl-6 mt-2 space-y-1">
                 <li data-policy="1"><input type="checkbox" id="policy1" class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" disabled> Giảm 50% học phí năm thứ nhất cho tân sinh viên hộ nghèo, cận nghèo <span class="italic">(không áp dụng cho ngành Y khoa, Y học cổ truyền, Răng Hàm Mặt)</span>.</li>
-                <li data-policy="2"><input type="checkbox" id="policy2" class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" disabled> Giảm 50% học phí năm thứ nhất cho tân sinh viên mồ côi cha hoặc mẹ <span class="italic">(không áp dụng cho ngành Y khoa, Y học cổ truyền, Răng Hàm Mặt)</span>.</li>
+                <li data-policy="2"><input type="checkbox" id="policy2" class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" disabled> Giảm 50% học phí năm thứ nhất cho tân sinh viên mồ côi cha, mồ côi mẹ hoặc mồ côi cả cha và mẹ <span class="italic">(không áp dụng cho ngành Y khoa, Y học cổ truyền, Răng Hàm Mặt)</span>.</li>
                 <li data-policy="3"><input type="checkbox" id="policy3" class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" disabled> Giảm 40% học phí HK1 năm thứ nhất cho tân sinh viên là con của người có công với cách mạng, có anh/chị đang là sinh viên ĐHCL, người dân tộc thiểu số, con ruột của CB, GV trường THPT, TTGDTX, Sở GD&ĐT các tỉnh, hoặc con, em, cháu ruột của CB, GV ĐHCL <span class="italic">(không áp dụng cho ngành Y khoa, Y học cổ truyền, Răng Hàm Mặt)</span>.</li>
                 <li data-policy="4"><input type="checkbox" id="policy4" class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" disabled> Giảm 20% học phí HK1 năm thứ nhất cho học sinh THPT, TTGDTX ở Vĩnh Long. Riêng học sinh THCS và THPT Phú Quới giảm 40% HK1 <span class="italic">(không áp dụng cho ngành Y khoa, Y học cổ truyền, Răng Hàm Mặt)</span>.</li>
                 <li data-policy="5"><input type="checkbox" id="policy5" class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" disabled> Giảm 20% học phí trọn khóa cho ngành Công tác xã hội, Kỹ thuật xây dựng công trình giao thông, Kỹ thuật y sinh, Kinh doanh thương mại, Hộ sinh, Kỹ thuật hình ảnh y học.</li>
@@ -341,11 +341,11 @@
         <div class="signature-section mt-6 flex justify-between">
             <div class="w-1/2 text-center">
                 <p class="bold">Ý KIẾN TRUNG TÂM TUYỂN SINH</p>
-                <p class="mt-2" id="selectedPolicy"></p>
+                <p class="mt-2" id="selectedPolicy">Chưa chọn</p>
                 <div class="h-20"></div>
             </div>
             <div class="w-1/2 text-center">
-                <p class="italic">Vĩnh Long, ngày <span id="currentDate"></span></p>
+                <p class="italic">Vĩnh Long, ngày <span id="currentDate">Chưa nhập</span></p>
                 <p class="bold">NGƯỜI LÀM ĐƠN</p>
                 <div class="h-20"></div>
             </div>
@@ -365,7 +365,7 @@
             const errorMessage = document.getElementById('errorMessage');
 
             // Kiểm tra dữ liệu hợp lệ
-            if (!data.fullName || !data.major) {
+            if (!data.fullName || !data.major || !data.selectedPolicyId) {
                 formContainer.style.display = 'none';
                 errorMessage.style.display = 'block';
                 return;
@@ -390,43 +390,28 @@
 
             // Ánh xạ văn bản chính sách cho phần Ý KIẾN TRUNG TÂM TUYỂN SINH
             const policyMessages = {
-                '1': 'Giảm 50% học phí năm thứ nhất cho tân sinh viên hộ nghèo, cận nghèo.',
-                '2': 'Giảm 50% học phí năm thứ nhất cho tân sinh viên mồ côi cha hoặc mẹ.',
-                '3': 'Giảm 40% học phí HK1 năm thứ nhất cho tân sinh viên là con của người có công với cách mạng, có anh/chị đang là sinh viên ĐHCL, người dân tộc thiểu số, con ruột của CB, GV trường THPT, TTGDTX, Sở GD&ĐT các tỉnh, hoặc con, em, cháu ruột của CB, GV ĐHCL.',
-                '4': {
-                    '20%': 'Giảm 20% học phí HK1 năm thứ nhất cho học sinh THPT, TTGDTX ở Vĩnh Long.',
-                    '40%': 'Giảm 40% học phí HK1 năm thứ nhất cho học sinh THCS và THPT Phú Quới.'
-                },
-                '5': 'Giảm 20% học phí trọn khóa cho ngành Công tác xã hội, Kỹ thuật xây dựng công trình giao thông, Kỹ thuật y sinh, Kinh doanh thương mại, Hộ sinh, Kỹ thuật hình ảnh y học.',
-                '6': {
-                    'main': `Miễn học phí HK1 năm nhất nếu điểm TBM lớp 12 từ 9.0 trở lên (điểm TBM: ${data.averageScore ? data.averageScore.toFixed(2) : 'Chưa có'}).`,
-                    'pharmacy': `Giảm 50% học phí HK1 năm nhất nếu điểm TBM lớp 12 từ 9.0 trở lên (ngành Dược học) (điểm TBM: ${data.averageScore ? data.averageScore.toFixed(2) : 'Chưa có'}).`
-                },
-                '7': {
-                    'main': `Giảm 50% học phí HK1 năm nhất nếu điểm TBM lớp 12 từ 8.5–dưới 9.0 (điểm TBM: ${data.averageScore ? data.averageScore.toFixed(2) : 'Chưa có'}).`,
-                    'pharmacy': `Giảm 25% học phí HK1 năm nhất nếu điểm TBM lớp 12 từ 8.5–dưới 9.0 (ngành Dược học) (điểm TBM: ${data.averageScore ? data.averageScore.toFixed(2) : 'Chưa có'}).`
-                },
+                '1': `Giảm 50% học phí năm thứ nhất cho tân sinh viên ${data.discountType === 'poor' ? 'hộ nghèo' : 'cận nghèo'}.`,
+                '2': `Giảm 50% học phí năm thứ nhất cho tân sinh viên mồ côi ${data.discountType === 'father' ? 'cha' : data.discountType === 'mother' ? 'mẹ' : 'cha và mẹ'}.`,
+                '3': `Giảm 40% học phí HK1 năm thứ nhất cho tân sinh viên là ${{
+                    revolutionary: 'con của người có công với cách mạng',
+                    sibling: 'có anh/chị đang là sinh viên ĐHCL',
+                    minority: 'người dân tộc thiểu số',
+                    teacherChild: 'con ruột của CB, GV trường THPT, TTGDTX, Sở GD&ĐT các tỉnh',
+                    mkuRelative: 'con, em, cháu ruột của CB, GV ĐHCL'
+                }[data.discountType]}.`,
+                '4': `Giảm ${data.discountType} học phí HK1 năm thứ nhất cho học sinh ${data.discountType === '20%' ? 'THPT, TTGDTX ở Vĩnh Long' : 'THCS và THPT Phú Quới'}.`,
+                '5': `Giảm 20% học phí trọn khóa cho ngành ${data.discountType}.`,
+                '6': `Miễn học phí HK1 năm nhất nếu điểm TBM lớp 12 từ 9.0 trở lên${data.major && data.major.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes('duoc hoc') ? ' (giảm 50% HK1 cho ngành Dược học)' : ''} (điểm TBM: ${data.averageScore ? data.averageScore.toFixed(2) : 'Chưa có'}).`,
+                '7': `Giảm 50% học phí HK1 năm nhất nếu điểm TBM lớp 12 từ 8.5–dưới 9.0${data.major && data.major.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes('duoc hoc') ? ' (giảm 25% HK1 cho ngành Dược học)' : ''} (điểm TBM: ${data.averageScore ? data.averageScore.toFixed(2) : 'Chưa có'}).`,
                 '8': `Giảm 25% học phí HK1 nếu điểm TBM lớp 12 từ 8.0–dưới 8.5 (điểm TBM: ${data.averageScore ? data.averageScore.toFixed(2) : 'Chưa có'}).`,
-                '9': 'Miễn học phí toàn khóa cho sinh viên dân tộc Khmer theo giới thiệu của Ban Dân tộc các tỉnh: An Giang, Bạc Liêu, Hậu Giang, Kiên Giang, Sóc Trăng, Trà Vinh, Vĩnh Long.',
-                '10': 'Giảm 50% học phí HK1 năm thứ nhất cho con thương binh, con liệt sĩ.'
+                '9': `Miễn học phí toàn khóa cho sinh viên dân tộc Khmer theo giới thiệu của Ban Dân tộc tỉnh ${data.discountType}.`,
+                '10': `Giảm 50% học phí HK1 năm thứ nhất cho ${data.discountType === 'wounded' ? 'con thương binh' : 'con liệt sĩ'}.`
             };
 
             // Hiển thị chính sách tại Ý KIẾN TRUNG TÂM TUYỂN SINH
             const selectedPolicyId = data.selectedPolicyId;
-            const major = data.major ? data.major.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : '';
-            const isPharmacyMajor = major.includes('duoc hoc');
             if (selectedPolicyId) {
-                if (selectedPolicyId === '4') {
-                    const discountType = data.discountType || '20%';
-                    document.getElementById('selectedPolicy').innerText = policyMessages['4'][discountType] || 'Chưa chọn';
-                } else if (selectedPolicyId === '6' || selectedPolicyId === '7') {
-                    const discountType = isPharmacyMajor ? 'pharmacy' : 'main';
-                    document.getElementById('selectedPolicy').innerText = policyMessages[selectedPolicyId][discountType] || 'Chưa chọn';
-                } else if (selectedPolicyId === 'byScore') {
-                    document.getElementById('selectedPolicy').innerText = (data.discountMessage || 'Chưa chọn') + (data.averageScore ? ` (điểm TBM: ${data.averageScore.toFixed(2)})` : '');
-                } else {
-                    document.getElementById('selectedPolicy').innerText = policyMessages[selectedPolicyId] || 'Chưa chọn';
-                }
+                document.getElementById('selectedPolicy').innerText = policyMessages[selectedPolicyId] || data.discountMessage || 'Chưa chọn';
 
                 // Tự động chọn checkbox chính sách
                 if (selectedPolicyId !== 'byScore') {
