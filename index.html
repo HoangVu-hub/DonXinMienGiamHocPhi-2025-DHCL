@@ -6,7 +6,7 @@
     <meta name="description" content="Tính điểm trung bình và kiểm tra chính sách giảm học phí cho tân sinh viên Đại học Cửu Long">
     <meta name="keywords" content="giảm học phí, Đại học Cửu Long, tính điểm trung bình, xét tuyển đại học">
     <meta name="author" content="Đại học Cửu Long">
-    <title>Tính Điểm & Giảm Học Phí - Đại học Cửu Long</title>
+    <title>Tính Điểm &amp; Giảm Học Phí - Đại học Cửu Long</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -133,8 +133,8 @@
 <body class="bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen flex flex-col items-center p-4 sm:p-6">
     <main class="w-full max-w-4xl flex flex-col md:flex-row gap-4 sm:gap-6">
         <section class="bg-white rounded-xl shadow-md p-4 sm:p-5 w-full md:w-1/2">
-            <h1 class="text-xl sm:text-2xl font-bold text-blue-800 mb-4 text-center">Tính Điểm & Giảm Học Phí</h1>
-            <h2 class="text-lg sm:text-xl font-semibold text-blue-700 mb-3">Nhập Thông Tin & Điểm</h2>
+            <h1 class="text-xl sm:text-2xl font-bold text-blue-800 mb-4 text-center">Tính Điểm &amp; Giảm Học Phí</h1>
+            <h2 class="text-lg sm:text-xl font-semibold text-blue-700 mb-3">Nhập Thông Tin &amp; Điểm</h2>
             <form class="space-y-3" id="inputForm">
                 <div>
                     <label for="fullName" class="block text-sm font-medium text-gray-700">Họ và tên *</label>
@@ -142,7 +142,8 @@
                 </div>
                 <div>
                     <label for="dob" class="block text-sm font-medium text-gray-700">Ngày sinh *</label>
-                    <input type="date" id="dob" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm sm:text-base" required onkeypress="handleEnter(event, this)" aria-label="Ngày sinh">
+                    <input type="date" id="dob" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm sm:text-base" required onchange="validateDate(this)" onkeypress="handleEnter(event, this)" aria-label="Ngày sinh">
+                    <div id="error-dob" class="error-message">Ngày sinh không được lớn hơn ngày hiện tại.</div>
                 </div>
                 <div>
                     <label for="birthPlace" class="block text-sm font-medium text-gray-700">Nơi sinh *</label>
@@ -239,7 +240,7 @@
                         </div>
                         <div class="flex items-center policy-option">
                             <input type="radio" id="policy5" name="discountPolicy" value="5" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" onchange="toggleEduTypeAndScoreTable()" aria-label="Ngành ưu tiên giảm học phí trọn khóa">
-                            <label for="policy5" class="ml-2 text-sm text-gray-700">5. các Ngành ưu tiên giảm học phí: Hộ sinh,..</label>
+                            <label for="policy5" class="ml-2 text-sm text-gray-700">5. Các ngành ưu tiên giảm học phí: Hộ sinh,...</label>
                             <div id="policy5Options" class="sub-policy" style="display: none;">
                                 <div class="flex items-center">
                                     <input type="radio" id="policy5_socialWork" name="policy5Type" value="Công tác xã hội" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" checked>
@@ -317,7 +318,7 @@
                         </div>
                         <div class="flex items-center policy-option">
                             <input type="radio" id="policyByScore" name="discountPolicy" value="byScore" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300" onchange="toggleEduTypeAndScoreTable()" aria-label="Chính sách dựa trên điểm trung bình">
-                            <label for="policyByScore" class="ml-2 text-sm text-gray-700">6 & 7 & 8 &Dựa trên điểm trung bình lớp 12</label>
+                            <label for="policyByScore" class="ml-2 text-sm text-gray-700">6 &amp; 7 &amp; 8. Dựa trên điểm trung bình lớp 12</label>
                         </div>
                     </div>
                     <button type="button" onclick="clearPolicySelection()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-sm sm:text-base">Xóa lựa chọn</button>
@@ -386,14 +387,14 @@
                                 <div id="error-sub7" class="error-message">Điểm từ 10–100</div>
                             </td>
                         </tr>
-                        <tr id="sub8-row">
-                            <td class="border border-gray-200 p-1.5 text-xs sm:text-sm">Giáo dục KT & PL</td>
+                        <tr id="sub8-row" style="display: table-row;">
+                            <td class="border border-gray-200 p-1.5 text-xs sm:text-sm">Giáo dục KT &amp; PL</td>
                             <td class="border border-gray-200 p-1.5 relative text-center">
-                                <input type="number" inputmode="numeric" class="input-field w-full px-2 py-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-xs sm:text-sm" id="sub8" min="10" max="100" step="1" oninput="validateScore(this)" onkeypress="handleEnter(event, this)" aria-label="Điểm Giáo dục KT & PL">
+                                <input type="number" inputmode="numeric" class="input-field w-full px-2 py-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-xs sm:text-sm" id="sub8" min="10" max="100" step="1" oninput="validateScore(this)" onkeypress="handleEnter(event, this)" aria-label="Điểm Giáo dục KT &amp; PL">
                                 <div id="error-sub8" class="error-message">Điểm từ 10–100</div>
                             </td>
                         </tr>
-                        <tr id="sub9-row">
+                        <tr id="sub9-row" style="display: table-row;">
                             <td class="border border-gray-200 p-1.5 text-xs sm:text-sm">Tin học</td>
                             <td class="border border-gray-200 p-1.5 relative text-center">
                                 <input type="number" inputmode="numeric" class="input-field w-full px-2 py-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-xs sm:text-sm" id="sub9" min="10" max="100" step="1" oninput="validateScore(this)" onkeypress="handleEnter(event, this)" aria-label="Điểm Tin học">
@@ -420,7 +421,7 @@
             <ul id="policyList" class="list-decimal pl-5 space-y-1.5 text-xs sm:text-sm text-gray-700">
                 <li data-policy="1">Giảm 50% học phí năm thứ nhất cho tân sinh viên hộ nghèo, cận nghèo (không áp dụng cho Y khoa, Y học cổ truyền, Răng Hàm Mặt).</li>
                 <li data-policy="2">Giảm 50% học phí năm thứ nhất cho tân sinh viên mồ côi cha hoặc mẹ (không áp dụng cho Y khoa, Y học cổ truyền, Răng Hàm Mặt).</li>
-                <li data-policy="3">Giảm 40% học phí HK1 năm thứ nhất cho tân sinh viên là con của người có công với cách mạng, có anh/chị đang là sinh viên ĐHCL, người dân tộc thiểu số, con ruột của CB, GV trường THPT, TTGDTX, Sở GD&ĐT các tỉnh, hoặc con, em, cháu ruột của CB, GV ĐHCL (không áp dụng cho Y khoa, Y học cổ truyền, Răng Hàm Mặt).</li>
+                <li data-policy="3">Giảm 40% học phí HK1 năm thứ nhất cho tân sinh viên là con của người có công với cách mạng, có anh/chị đang là sinh viên ĐHCL, người dân tộc thiểu số, con ruột của CB, GV trường THPT, TTGDTX, Sở GD&amp;ĐT các tỉnh, hoặc con, em, cháu ruột của CB, GV ĐHCL (không áp dụng cho Y khoa, Y học cổ truyền, Răng Hàm Mặt).</li>
                 <li data-policy="4">Giảm 20% học phí HK1 năm thứ nhất cho học sinh THPT, TTGDTX ở Vĩnh Long. Riêng học sinh THCS và THPT Phú Quới giảm 40% HK1 (không áp dụng cho Y khoa, Y học cổ truyền, Răng Hàm Mặt).</li>
                 <li data-policy="5">Giảm 20% học phí trọn khóa cho ngành Công tác xã hội, Kỹ thuật xây dựng công trình giao thông, Kỹ thuật y sinh, Kinh doanh thương mại, Hộ sinh, Kỹ thuật hình ảnh y học.</li>
                 <li data-policy="6">Miễn học phí HK1 năm nhất nếu điểm TBM lớp 12 từ 9.0 trở lên, riêng ngành Dược học giảm 50% HK1 (không áp dụng cho Y khoa, Y học cổ truyền, Răng Hàm Mặt).</li>
@@ -500,6 +501,30 @@
             "Truyền thông đa phương tiện",
             "Quan hệ công chúng"
         ];
+
+        function setMaxDateForDob() {
+            const today = new Date();
+            const maxDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+            document.getElementById('dob').setAttribute('max', maxDate);
+        }
+
+        function validateDate(input) {
+            const selectedDate = new Date(input.value);
+            const today = new Date();
+            const errorDiv = document.getElementById('error-dob');
+            if (selectedDate > today) {
+                errorDiv.style.display = 'block';
+                input.classList.add('invalid');
+                input.value = '';
+                setTimeout(() => {
+                    input.classList.remove('invalid');
+                    errorDiv.style.display = 'none';
+                }, 1500);
+            } else {
+                errorDiv.style.display = 'none';
+                input.classList.remove('invalid');
+            }
+        }
 
         function capitalizeWords(input) {
             let value = input.value;
@@ -595,22 +620,37 @@
         }
 
         function selectMajor(major) {
-            document.getElementById('major').value = major;
-            document.getElementById('majorSuggestions').style.display = 'none';
-            const eligibleMajors = [
-                'Công tác xã hội',
-                'Kỹ thuật xây dựng công trình giao thông',
-                'Kỹ thuật y sinh',
-                'Kinh doanh thương mại',
-                'Hộ sinh',
-                'Kỹ thuật hình ảnh y học'
-            ];
-            if (eligibleMajors.includes(major)) {
-                document.getElementById('policy5').checked = true;
-                document.getElementById(`policy5_${major.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '')}`).checked = true;
-                toggleEduTypeAndScoreTable();
+    document.getElementById('major').value = major;
+    document.getElementById('majorSuggestions').style.display = 'none';
+    const eligibleMajors = [
+        'Công tác xã hội',
+        'Kỹ thuật xây dựng công trình giao thông',
+        'Kỹ thuật y sinh',
+        'Kinh doanh thương mại',
+        'Hộ sinh',
+        'Kỹ thuật hình ảnh y học'
+    ];
+    if (eligibleMajors.includes(major)) {
+        document.getElementById('policy5').checked = true;
+        // Map major names to radio button IDs
+        const majorToRadioId = {
+            'Công tác xã hội': 'policy5_socialWork',
+            'Kỹ thuật xây dựng công trình giao thông': 'policy5_transport',
+            'Kỹ thuật y sinh': 'policy5_biomedical',
+            'Kinh doanh thương mại': 'policy5_commerce',
+            'Hộ sinh': 'policy5_midwifery',
+            'Kỹ thuật hình ảnh y học': 'policy5_imaging'
+        };
+        const radioId = majorToRadioId[major];
+        if (radioId) {
+            const radioElement = document.getElementById(radioId);
+            if (radioElement) {
+                radioElement.checked = true;
             }
         }
+        toggleEduTypeAndScoreTable();
+    }
+}
 
         function handleEnter(event, currentInput) {
             if (event.key === 'Enter') {
@@ -688,8 +728,16 @@
         function calculateAverage() {
             const selectedPolicy = document.querySelector('input[name="discountPolicy"]:checked');
             const majorInput = document.getElementById('major').value;
+            const dobInput = document.getElementById('dob');
             const totalResult = document.getElementById('totalResult');
             const phoneInput = document.getElementById('phone');
+
+            if (!dobInput.value) {
+                totalResult.innerText = 'Lỗi: Vui lòng nhập ngày sinh';
+                dobInput.classList.add('invalid');
+                setTimeout(() => dobInput.classList.remove('invalid'), 1000);
+                return;
+            }
 
             if (!majorInput || !majors.includes(majorInput)) {
                 totalResult.innerText = 'Lỗi: Vui lòng chọn ngành học hợp lệ';
@@ -954,6 +1002,7 @@
         }
 
         window.onload = function() {
+            setMaxDateForDob();
             toggleEduTypeAndScoreTable();
             updateSubjectTable();
             ['fullName', 'birthPlace', 'address', 'major'].forEach(id => {
