@@ -9,13 +9,11 @@
     <title>Đơn Xin Nhận Tiền Miễn Giảm Học Phí - Đại học Cửu Long</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Default font and color settings for the document */
+        /* Giữ nguyên toàn bộ CSS từ mã gốc */
         body {
             font-family: 'Times New Roman', Times, serif;
             color: #000000;
         }
-
-        /* Form container styled for A4 size and layout */
         .form-container {
             width: 100%;
             max-width: 794px;
@@ -23,127 +21,94 @@
             padding: 15mm;
             box-sizing: border-box;
         }
-
-        /* Main title styling */
         .title-main {
             font-size: 12pt;
             font-weight: bold;
             text-align: center;
         }
-
-        /* Subtitle styling */
         .title-sub {
             font-size: 13pt;
             font-weight: bold;
             text-align: center;
         }
-
-        /* Form title styling */
         .form-title {
             font-size: 14pt;
             font-weight: bold;
             text-align: center;
         }
-
-        /* Recipient section styling */
         .recipient .kinh-gui {
             text-align: left;
             font-size: 14pt;
         }
-
         .recipient .flex {
             display: flex;
             justify-content: flex-start;
         }
-
         .recipient .inline-block {
             text-align: left;
         }
-
         .recipient .inline-block p {
             position: relative;
             padding-left: 1rem;
             font-size: 14pt;
         }
-
         .recipient .inline-block p::before {
             content: '-';
             position: absolute;
             left: 0;
             font-weight: bold;
         }
-
-        /* Personal info section styling */
         .personal-info p {
             font-size: 13pt;
         }
-
-        /* Policy section styling */
         .policy-section > p {
             font-size: 13pt;
             font-weight: bold;
         }
-
         .policy-section ul {
             list-style-position: outside;
             padding-left: 1.5rem;
         }
-
         .policy-section li {
             font-size: 13pt;
         }
-
-        /* Attachment section styling */
         .attachment-section .attachment-title {
             font-size: 13pt;
             font-weight: bold;
             display: inline-block;
         }
-
         .attachment-section .italic {
             font-style: italic;
             font-weight: normal;
             text-transform: none !important;
         }
-
         .attachment-section ul {
             list-style-position: outside;
             padding-left: 1.5rem;
             overflow-x: hidden;
         }
-
         .attachment-section li {
             font-size: 13pt;
         }
-
-        /* Closing text styling */
         .closing-text.policy p {
             font-size: 11pt;
         }
-
         .closing-text.attachment p {
             font-size: 13pt;
         }
-
-        /* Signature section styling */
         .signature-section p {
             font-size: 13pt;
         }
-
         .signature-section .bold {
             font-weight: bold;
         }
-
         .signature-section .italic {
             font-style: italic;
         }
-
         .shape {
             border-bottom: 1px solid #000000;
             display: inline-block;
         }
-
-        /* Checkbox styling for policy section (larger) */
         .policy-section input {
             appearance: none;
             -webkit-appearance: none;
@@ -156,12 +121,10 @@
             vertical-align: middle;
             margin-right: 8px;
         }
-
         .policy-section input:checked {
             border-color: #000000 !important;
             background-color: #ffffff;
         }
-
         .policy-section input:checked::before {
             content: '✔';
             font-size: 14px;
@@ -172,8 +135,6 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-
-        /* Checkbox styling for attachment section (smaller) */
         .attachment-section input {
             appearance: none;
             -webkit-appearance: none;
@@ -186,12 +147,10 @@
             vertical-align: middle;
             margin-right: 8px;
         }
-
         .attachment-section input:checked {
             border-color: #000000 !important;
             background-color: #ffffff;
         }
-
         .attachment-section input:checked::before {
             content: '✔';
             font-size: 12px;
@@ -202,8 +161,6 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-
-        /* Responsive design for smaller screens */
         @media (max-width: 640px) {
             .form-container {
                 padding: 1rem;
@@ -254,8 +211,6 @@
                 font-size: 11px;
             }
         }
-
-        /* Print-specific styling for A4 layout */
         @media print {
             body {
                 margin: 0;
@@ -381,7 +336,7 @@
         }
     </style>
     <style>
-        /* Tailwind CSS styles */
+        /* Giữ nguyên toàn bộ Tailwind CSS từ mã gốc */
         *, ::before, ::after {
             --tw-border-spacing-x: 0;
             --tw-border-spacing-y: 0;
@@ -880,7 +835,7 @@
                 <div class="h-20"></div>
             </div>
             <div class="w-1/2 text-center">
-                <p class="italic">Vĩnh Long, ngày <span id="currentDate">21/08/2025</span></p>
+                <p class="italic">Vĩnh Long, ngày <span id="currentDate">ngày 25 tháng 08 năm 2025</span></p>
                 <p class="bold">NGƯỜI LÀM ĐƠN</p>
                 <div class="h-20"></div>
             </div>
@@ -908,12 +863,12 @@
 
             // Display personal information
             document.getElementById('fullName').innerText = data.fullName || 'Chưa nhập';
-            document.getElementById('dob').innerText = data.dob ? formatDate(data.dob) : 'Chưa nhập';
+            document.getElementById('dob').innerText = data.dob ? formatDateForDob(data.dob) : 'Chưa nhập';
             document.getElementById('birthPlace').innerText = data.birthPlace || 'Chưa nhập';
             document.getElementById('address').innerText = data.address || 'Chưa nhập';
             document.getElementById('phone').innerText = data.phone || 'Chưa nhập';
             document.getElementById('major').innerText = data.major || 'Chưa nhập';
-            document.getElementById('currentDate').innerText = formatDate(new Date());
+            document.getElementById('currentDate').innerText = formatDateForCurrent(new Date());
 
             // Display average score if applicable
             if (data.averageScore && data.selectedPolicyId === 'byScore') {
@@ -1007,8 +962,8 @@
             }
         };
 
-        // Date formatting function
-        function formatDate(dateString) {
+        // Date formatting function for date of birth (DD/MM/YYYY)
+        function formatDateForDob(dateString) {
             if (!dateString) return 'Chưa nhập';
             const date = new Date(dateString);
             const day = String(date.getDate()).padStart(2, '0');
@@ -1016,6 +971,16 @@
             const year = date.getFullYear();
             return `${day}/${month}/${year}`;
         }
+
+        // Date formatting function for current date (ngày DD tháng MM năm YYYY)
+        function formatDateForCurrent(dateString) {
+            if (!dateString) return 'Chưa nhập';
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `ngày ${day} tháng ${month} năm ${year}`;
+        }
     </script>
 </body>
-</html>
+</html> 
