@@ -456,7 +456,7 @@
                                         <th></th>
                                         <th>1</th><th>Điểm</th><th>2</th><th>Điểm</th><th>3</th><th>Điểm</th><th>4</th><th>Điểm</th>
                                         <th>5</th><th>Điểm</th><th>6</th><th>Điểm</th><th>7</th><th>Điểm</th><th>8</th><th>Điểm</th><th>9</th><th>Điểm</th>
-                                        <th>THM</th><th>Điểm THM</th><th>TBM x3 + Ưu tiên</th>
+                                        <th>THM</th><th>Điểm THM</th><th>Điểm TBM HB</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -486,7 +486,7 @@
                             <h3 class="text-center text-info mt-3">Điểm TBM của các môn học đã nhập</h3> <!-- Giảm mt-4 -->
                             <p>Số môn đã nhập: <span id="numSubjects">0</span></p>
                             <p>Điểm TBM là: <span id="tbmValue">0</span></p>
-                            <p>TBM x3 + Ưu tiên: <span id="tbmFinal">0</span></p>
+                            <p>Điểm TBM HB: <span id="tbmFinal">0</span></p>
                         </div>
                         <div id="comparisonSection" class="text-center mt-3"> <!-- Giảm mt-4 -->
                             <p>Bạn có muốn xem kết quả xét so sánh để biết điểm xét tuyển và kết quả của:</p>
@@ -514,7 +514,7 @@
                                             <th>Kết Quả THM Học Bạ</th>
                                             <th>Điểm Xét THM THPT</th>
                                             <th>Kết Quả THM THPT</th>
-                                            <th>TBM x3 + Ưu tiên</th>
+                                            <th>Điểm TBM HB</th>
                                             <th>Kết Quả TBM Học Bạ</th>
                                             <th>Điểm Sàn Học Bạ</th>
                                             <th>Điểm Sàn THPT</th>
@@ -969,78 +969,117 @@
             });
         }
 
-        // Hàm tạo acronym từ tên ngành
+        // Hàm normalize để loại bỏ dấu tiếng Việt
+        function normalize(str) {
+            return str.normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '') // Remove accents
+                .replace(/đ/g, 'd').replace(/Đ/g, 'D') // Replace đ
+                .toLowerCase();
+        }
+
+        // Hàm Levenshtein Distance để tính similarity tốt hơn
+        function levenshteinDistance(str1, str2) {
+            str1 = str1.toLowerCase();
+            str2 = str2.toLowerCase();
+            const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
+
+            for (let i = 0; i <= str1.length; i++) {
+                matrix[0][i] = i;
+            }
+            for (let j = 0; j <= str2.length; j++) {
+                matrix[j][0] = j;
+            }
+
+            for (let j = 1; j <= str2.length; j++) {
+                for (let i = 1; i <= str1.length; i++) {
+                    const cost = str2.charAt(j - 1) === str1.charAt(i - 1) ? 0 : 1;
+                    matrix[j][i] = Math.min(
+                        matrix[j - 1][i - 1] + cost, // substitution
+                        matrix[j][i - 1] + 1,     // insertion
+                        matrix[j - 1][i] + 1      // deletion
+                    );
+                }
+            }
+            return matrix[str2.length][str1.length];
+        }
+
+        // Hàm tính similarity dựa trên Levenshtein
+        function similarityScore(s1, s2) {
+            const distance = levenshteinDistance(s1, s2);
+            const maxLen = Math.max(s1.length, s2.length);
+            return maxLen === 0 ? 1 : 1 - (distance / maxLen);
+        }
+
+        // Hàm tạo acronym từ tên ngành (sử dụng normalized)
         function generateAcronym(name) {
-            const words = name.toLowerCase().split(/\s+/);
+            const words = normalize(name).split(/\s+/);
             return words.map(word => word.charAt(0)).join('');
         }
 
-        // Hàm tính similarity đơn giản (tương tự SequenceMatcher)
-        function stringSimilarity(s1, s2) {
-            s1 = s1.toLowerCase();
-            s2 = s2.toLowerCase();
-            const longer = s1.length > s2.length ? s1 : s2;
-            const shorter = s1.length > s2.length ? s2 : s1;
-            let matches = 0;
-            for (let i = 0; i < shorter.length; i++) {
-                if (longer.includes(shorter[i])) {
-                    matches++;
-                }
-            }
-            return matches / longer.length;
-        }
-
-        // Hàm tìm kiếm fuzzy mới (dựa trên Python logic)
+        // Hàm tìm kiếm fuzzy cải thiện (với normalize và Levenshtein, threshold cao hơn để tránh highlight nhiều)
         function fuzzySearch(query, names) {
             const queryLower = query.toLowerCase().trim();
-            if (!queryLower) {
+            const queryNorm = normalize(queryLower);
+            if (!queryNorm) {
                 return names.map(name => ({ name, score: 1.0 }));
             }
 
             const results = [];
             names.forEach(name => {
                 const nameLower = name.toLowerCase();
+                const nameNorm = normalize(nameLower);
                 let score = 0.0;
 
-                // Exact substring
-                if (nameLower.includes(queryLower)) {
+                // Exact substring trên normalized
+                if (nameNorm.includes(queryNorm)) {
                     score = 1.0;
                 } else {
-                    // Word match
-                    const queryWords = queryLower.split(/\s+/);
-                    const nameWords = nameLower.split(/\s+/);
+                    // Word match cải thiện: chỉ count nếu exact match hoặc high similarity (>0.8)
+                    const queryWords = queryNorm.split(/\s+/);
+                    const nameWords = nameNorm.split(/\s+/);
                     let wordMatches = 0;
                     queryWords.forEach(qw => {
                         nameWords.forEach(nw => {
-                            if (nw.includes(qw)) {
+                            if (nw === qw || nw.includes(qw) || qw.includes(nw)) {
                                 wordMatches++;
+                            } else {
+                                const wordSim = similarityScore(qw, nw);
+                                if (wordSim > 0.8) {
+                                    wordMatches += wordSim;
+                                }
                             }
                         });
                     });
-                    score = (wordMatches / Math.max(queryWords.length, 1)) * 0.8;
+                    score = (wordMatches / Math.max(queryWords.length * nameWords.length, 1)) * 1.0;
                 }
 
-                // Acronym match
-                const acronym = generateAcronym(name);
-                if (queryLower === acronym || acronym.includes(queryLower)) {
+                // Acronym match (sử dụng normalized)
+                const acronym = generateAcronym(nameLower);
+                if (queryNorm === acronym || acronym.includes(queryNorm)) {
                     score = Math.max(score, 1.0);
-                } else if (acronym.startsWith(queryLower)) {
-                    score = Math.max(score, 0.9);
+                } else if (acronym.startsWith(queryNorm)) {
+                    score = Math.max(score, 0.95);
                 }
 
-                // Fuzzy similarity
-                const fuzzyScore = stringSimilarity(queryLower, nameLower);
-                score = Math.max(score, fuzzyScore);
+                // Fuzzy similarity với Levenshtein trên toàn bộ chuỗi normalized (giảm trọng số)
+                const fuzzyScore = similarityScore(queryNorm, nameNorm);
+                score = Math.max(score, fuzzyScore * 0.7);
 
-                if (score > 0.5) {
+                // Thêm match nếu tất cả từ query đều có trong name (order không quan trọng, nhưng chỉ nếu sim cao)
+                const queryWords = queryNorm.split(/\s+/);
+                if (queryWords.every(qw => nameNorm.includes(qw))) {
+                    score = Math.max(score, 0.98);
+                }
+
+                if (score > 0.7) { // Tăng threshold để chỉ highlight match tốt, tránh "tô vàng tùm lum"
                     results.push({ name, score });
                 }
             });
 
-            return results.sort((a, b) => b.score - a.score).slice(0, 5);
+            return results.sort((a, b) => b.score - a.score).slice(0, 5); // Giới hạn 5 kết quả tốt nhất
         }
 
-        // Function để xử lý tìm kiếm mới
+        // Function để xử lý tìm kiếm mới - chỉ highlight nếu score cao
         function performSearch(inputId, tableSelector) {
             const searchValue = document.getElementById(inputId).value.trim();
             const table = document.querySelector(tableSelector);
@@ -1055,9 +1094,9 @@
                 row.classList.remove('highlight');
                 const majorName = row.dataset.majorName || '';
                 const match = matches.find(m => m.name === majorName);
-                if (match) {
+                if (match && match.score >= 0.8) { // Chỉ highlight nếu score rất cao
                     row.classList.add('highlight');
-                    if (!foundRow && match.score === matches[0]?.score) {  // Highlight top match first
+                    if (!foundRow) {
                         foundRow = row;
                     }
                 }
